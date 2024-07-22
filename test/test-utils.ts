@@ -25,8 +25,8 @@ export const resetDBBeforeTest = async (): Promise<void> => {
     type: 'postgres',
     host: TEST_DB_HOST,
     port: 5432,
-    username: 'root',
-    password: 'example',
+    username: 'nodeking',
+    password: 'nodeking',
     database: 'postgres',
   });
 
@@ -43,8 +43,8 @@ export const createDBEntities = async (): Promise<void> => {
     type: 'postgres',
     host: TEST_DB_HOST,
     port: 5432,
-    username: 'root',
-    password: 'example',
+    username: 'nodeking',
+    password: 'nodeking',
     database: TEST_DB_NAME,
     entities: [__dirname + '/../src/**/*.entity{.ts,.js}'],
     synchronize: true,
@@ -68,7 +68,7 @@ export const seedAdminUser = async (
   // Creating Admin User
   const userService = app.get(UserService);
   const userOutput = await userService.createUser(ctx, defaultAdmin);
-
+  console.log('Admin User created:', userOutput);
   const loginInput: LoginInput = {
     username: defaultAdmin.username,
     password: defaultAdmin.password,
