@@ -1,4 +1,4 @@
-- [] database migration 코드 적용
+- [x] database migration 코드 적용
 - [] 유닛테스트 코드 작성
 - [] e2e테스트 코드 작성
 - [] 로깅데이터 가독성 높이는 코드 적용
