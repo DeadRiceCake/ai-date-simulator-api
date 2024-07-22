@@ -11,6 +11,8 @@ import { UserOutput } from '../src/user/dtos/user-output.dto';
 import { UserService } from '../src/user/services/user.service';
 
 const TEST_DB_HOST = process.env.TEST_DB_HOST || 'localhost';
+const TEST_DB_USER = process.env.TEST_DB_USER || 'nodeking';
+const TEST_DB_PASSWORD = process.env.TEST_DB_PASS || 'nodeking';
 const TEST_DB_CONNECTION_NAME = 'e2e_test_connection';
 export const TEST_DB_NAME = 'e2e_test_db';
 
@@ -25,8 +27,8 @@ export const resetDBBeforeTest = async (): Promise<void> => {
     type: 'postgres',
     host: TEST_DB_HOST,
     port: 5432,
-    username: 'nodeking',
-    password: 'nodeking',
+    username: TEST_DB_USER,
+    password: TEST_DB_PASSWORD,
     database: 'postgres',
   });
 
@@ -43,8 +45,8 @@ export const createDBEntities = async (): Promise<void> => {
     type: 'postgres',
     host: TEST_DB_HOST,
     port: 5432,
-    username: 'nodeking',
-    password: 'nodeking',
+    username: TEST_DB_USER,
+    password: TEST_DB_PASSWORD,
     database: TEST_DB_NAME,
     entities: [__dirname + '/../src/**/*.entity{.ts,.js}'],
     synchronize: true,
