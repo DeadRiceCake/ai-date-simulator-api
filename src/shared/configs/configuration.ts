@@ -27,4 +27,9 @@ export default (): any => ({
     ),
   },
   defaultAdminUserPassword: process.env.DEFAULT_ADMIN_USER_PASSWORD,
+  openai: {
+    organizationId: process.env.OPENAI_ORGANIZATION,
+    projectId: process.env.OPENAI_PROJECT,
+    apiKey: process.env.OPENAI_API_KEY,
+  },
 });
