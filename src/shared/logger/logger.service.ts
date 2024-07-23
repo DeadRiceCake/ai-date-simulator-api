@@ -1,5 +1,6 @@
 import { Injectable, Scope } from '@nestjs/common';
-import { createLogger, Logger, transports } from 'winston';
+import { utilities } from 'nest-winston';
+import { createLogger, format,Logger, transports } from 'winston';
 
 import { RequestContext } from '../request-context/request-context.dto';
 
@@ -13,7 +14,13 @@ export class AppLogger {
   }
 
   constructor() {
-    this.logger = createLogger({
+    this.logger = createLogger({  
+      format: format.combine(
+        utilities.format.nestLike('miyeonsi', {
+          colors: true,
+          prettyPrint: true,
+        }),
+      ),
       transports: [new transports.Console()],
     });
   }
