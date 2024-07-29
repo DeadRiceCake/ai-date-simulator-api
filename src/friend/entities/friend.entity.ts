@@ -2,14 +2,14 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinTable,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 import { User } from '../../user/entities/user.entity';
-import { Gender } from '../types/gender.type';
+import { Gender } from '../constants/gender.constant';
 
 @Entity('friends')
 export class Friend {
@@ -34,6 +34,6 @@ export class Friend {
   @ManyToOne(() => User, (user) => user.friends, {
     eager: true,
   })
-  @JoinTable({ name: 'user_id' })
+  @JoinColumn({ name: 'user_id' })
   user: User;
 }
