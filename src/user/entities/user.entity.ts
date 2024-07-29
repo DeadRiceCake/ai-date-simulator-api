@@ -43,4 +43,7 @@ export class User {
 
   @OneToMany(() => Article, (article) => article.author)
   articles: Article[];
+
+  @OneToMany(() => User, (user) => user.friends)
+  friends: User[];
 }
