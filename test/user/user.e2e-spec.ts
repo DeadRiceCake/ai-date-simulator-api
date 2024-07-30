@@ -18,12 +18,8 @@ describe('UserController (e2e)', () => {
   let authTokenForAdmin: AuthTokenOutput;
 
   beforeAll(async () => {
-    try {
-      await resetDBBeforeTest();
-      await createDBEntities();
-    } catch (error) {
-      console.log('Error in beforeAll block', error);
-    }
+    await resetDBBeforeTest();
+    await createDBEntities();
 
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule],
