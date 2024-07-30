@@ -51,6 +51,7 @@ describe('UserRepository', () => {
         createdAt: currentDate,
         updatedAt: currentDate,
         articles: [],
+        friends: [],
       };
 
       jest.spyOn(repository, 'findOne').mockResolvedValue(expectedOutput);
@@ -70,6 +71,7 @@ describe('UserRepository', () => {
         createdAt: currentDate,
         updatedAt: currentDate,
         articles: [],
+        friends: [],
       };
 
       jest.spyOn(repository, 'findOne').mockResolvedValue(expectedOutput);

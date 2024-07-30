@@ -103,7 +103,6 @@ describe('FriendService', () => {
       };
 
       const output = await service.createFriend(ctx, friendInput);
-      console.log(output);
       expect(mockedRepository.save).toHaveBeenCalledWith(friend);
       expect(output).toEqual(expectedOutput);
     });
