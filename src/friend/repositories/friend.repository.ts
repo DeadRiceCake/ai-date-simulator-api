@@ -10,11 +10,11 @@ export class FriendRepository extends Repository<Friend> {
   }
 
   async getById(id: number): Promise<Friend> {
-    const user = await this.findOne({ where: { id } });
-    if (!user) {
+    const friend = await this.findOne({ where: { id } });
+    if (!friend) {
       throw new NotFoundException();
     }
 
-    return user;
+    return friend;
   }
 }

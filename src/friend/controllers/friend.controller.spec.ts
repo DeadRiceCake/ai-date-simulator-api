@@ -3,14 +3,20 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AppLogger } from '../../shared/logger/logger.service';
 import { RequestContext } from '../../shared/request-context/request-context.dto';
 import { CreateFriendInput } from '../dtos/create-friend-input.dto';
+import { FriendImageOutput } from '../dtos/friend-image-output.dto';
 import { FriendOutput } from '../dtos/friend-output.dto';
+import { GenerateFriendImageInput } from '../dtos/generate-friend-image-input.dto';
 import { FriendService } from '../services/friend.service';
+import { FriendImageService } from '../services/friend-image.service';
 import { FriendController } from './friend.controller';
 
 describe('FriendController', () => {
   let controller: FriendController;
   const mockedFriendService = {
     createFriend: jest.fn(),
+  };
+  const mockedFriendImageService = {
+    generateFriendImage: jest.fn(),
   };
   const mockedLogger = { setContext: jest.fn(), log: jest.fn() };
 
@@ -19,6 +25,7 @@ describe('FriendController', () => {
       controllers: [FriendController],
       providers: [
         { provide: FriendService, useValue: mockedFriendService },
+        { provide: FriendImageService, useValue: mockedFriendImageService },
         { provide: AppLogger, useValue: mockedLogger },
       ]
     }).compile();
@@ -74,6 +81,38 @@ describe('FriendController', () => {
       } catch (error: any) {
         expect(error.message).toEqual('Error');
       }
+    });
+  });
+
+  describe('Generate friend image', () => {
+    let input: GenerateFriendImageInput;
+
+    beforeEach(() => {
+      input = {
+        prompt: 'super kawaii girl',
+      };
+    });
+
+    it('should call friendImageService.generateFriendImage with correct input', () => {
+      controller.generateFriendImage(ctx, input);
+      expect(mockedFriendImageService.generateFriendImage).toHaveBeenCalledWith(ctx, input);
+    });
+
+    it('should return the correct result', async () => {
+      const currentDate = new Date();
+      const expectedOutput: FriendImageOutput = {
+        id: 1,
+        prompt: 'super kawaii girl',
+        imageURL: 'https://example.com/image.jpg',
+        createdAt: currentDate,
+      };
+
+      mockedFriendImageService.generateFriendImage.mockResolvedValue(expectedOutput);
+
+      expect(await controller.generateFriendImage(ctx, input)).toEqual({
+        data: expectedOutput,
+        meta: {},
+      });
     });
   });
 });

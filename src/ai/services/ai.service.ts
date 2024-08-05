@@ -47,6 +47,6 @@ export class AiService {
       size: "1024x1024"
     });
 
-    return imagesResponse;
+    return imagesResponse.data[0].url;
   }
 }

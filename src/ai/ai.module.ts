@@ -5,6 +5,7 @@ import { AiService } from './services/ai.service';
 
 @Module({
   imports: [SharedModule],
-  providers: [AiService]
+  providers: [AiService],
+  exports: [AiService],
 })
 export class AiModule {}

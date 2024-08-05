@@ -3,7 +3,7 @@ import { DataSource } from 'typeorm';
 
 import { FriendRepository } from './friend.repository';
 
-describe('UserRepository', () => {
+describe('FriendRepository', () => {
   let repository: FriendRepository;
 
   let dataSource: {

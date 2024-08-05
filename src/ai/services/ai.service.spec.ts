@@ -52,15 +52,8 @@ describe('AiService', () => {
       const prompt = 'draw a kawaii girl';
       
       const imageResponse = await service.createImage(ctx, prompt);
-      console.log(imageResponse);
-      expect(imageResponse).toEqual({
-        created: 1589478378,
-        data: [
-          {
-            url: 'https://openai.com/image.jpg',
-          },
-        ]
-      })
+
+      expect(imageResponse).toEqual('https://openai.com/image.jpg');
     });
   });
 });

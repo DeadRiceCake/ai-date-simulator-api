@@ -5,6 +5,7 @@ import request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import { AuthTokenOutput } from '../../src/auth/dtos/auth-token-output.dto';
 import { CreateFriendInput } from '../../src/friend/dtos/create-friend-input.dto';
+import { GenerateFriendImageInput } from '../../src/friend/dtos/generate-friend-image-input.dto';
 import {
   closeDBAfterTest,
   createDBEntities,
@@ -69,6 +70,30 @@ describe('FriendController (e2e)', () => {
         .expect(HttpStatus.BAD_REQUEST);
     });
   });
+
+  describe('create friend image', () => {
+    // This test is skipped because it takes too long to run and must pay for the OpenAI API.
+    it.skip('Generate friend image successfully', async () => {
+      const friendImageInput: GenerateFriendImageInput = {
+        prompt: 'super kawaii girl',
+      };
+
+      return await request(app.getHttpServer())
+        .post('/friends/image')
+        .set('Authorization', 'Bearer ' + authTokenForAdmin.accessToken)
+        .send(friendImageInput)
+        .expect(HttpStatus.CREATED)
+        .expect((res) => {
+          const { data } = res.body;
+          expect(data).toEqual({
+            id: expect.any(Number),
+            prompt: 'super kawaii girl',
+            imageURL: expect.any(String),
+            createdAt: expect.any(String),
+          });
+        });
+    }, 20000);
+  })
 
   afterAll(async () => {
     await app.close();
