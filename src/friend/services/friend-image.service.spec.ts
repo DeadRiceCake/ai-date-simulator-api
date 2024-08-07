@@ -27,6 +27,7 @@ describe('FriendImageService', () => {
           provide: FriendImageRepository,
           useValue: {
             save: jest.fn(),
+            findAndCount: jest.fn(),
           },
         },
         {
@@ -107,6 +108,58 @@ describe('FriendImageService', () => {
       };
 
       expect(await service.generateFriendImage(ctx, input)).toEqual(expectedOutput);
+    });
+  });
+
+  describe('getFriendImages', () => {
+    ctx.user = {
+      id: 1,
+      roles: [ROLE.USER],
+      username: 'testuser',
+    };
+
+    it('should call repository.findAndCount with correct input', async () => {
+      mockedRepository.findAndCount.mockResolvedValue([[], 1]);
+      
+      const limit = 10;
+      const offset = 0;
+
+      await service.getFriendImages(ctx, limit, offset);
+      expect(mockedRepository.findAndCount).toHaveBeenCalledWith({
+        where: {
+          user: {
+            id: ctx.user?.id,
+          },
+        },
+        take: limit,
+        skip: offset,
+      });
+    });
+
+    it('should return the correct result', async () => {
+      const currentDate = new Date();
+      const expectedFriendImages: FriendImage[] = [
+        {
+          id: 1,
+          prompt: 'prompt1',
+          imageURL: 'https://image1.com',
+          user: new User(),
+          createdAt: currentDate,
+        },
+      ];
+
+      const expectedOutput: FriendImageOutput[] = [
+        {
+          id: 1,
+          prompt: 'prompt1',
+          imageURL: 'https://image1.com',
+          createdAt: currentDate,
+        },
+      ];
+
+      mockedRepository.findAndCount.mockResolvedValue([expectedFriendImages, 1]);
+
+      expect(await service.getFriendImages(ctx, 10, 0)).toEqual({ friendImages: expectedOutput, count: 1 });
     });
   });
 });

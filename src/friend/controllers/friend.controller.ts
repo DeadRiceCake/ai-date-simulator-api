@@ -85,11 +85,11 @@ export class FriendController {
   @UseInterceptors(ClassSerializerInterceptor)
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  async getArticles(
+  async getFriendImages(
     @ReqContext() ctx: RequestContext,
     @Query() query: PaginationParamsDto,
   ): Promise<BaseApiResponse<FriendImageOutput[]>> {
-    this.logger.log(ctx, `${this.getArticles.name} was called`);
+    this.logger.log(ctx, `${this.getFriendImages.name} was called`);
 
     const { friendImages, count } = await this.friendImageService.getFriendImages(
       ctx,

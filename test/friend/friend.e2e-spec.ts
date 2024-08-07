@@ -5,6 +5,7 @@ import request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import { AuthTokenOutput } from '../../src/auth/dtos/auth-token-output.dto';
 import { CreateFriendInput } from '../../src/friend/dtos/create-friend-input.dto';
+import { FriendImageOutput } from '../../src/friend/dtos/friend-image-output.dto';
 import { GenerateFriendImageInput } from '../../src/friend/dtos/generate-friend-image-input.dto';
 import {
   closeDBAfterTest,
@@ -93,7 +94,19 @@ describe('FriendController (e2e)', () => {
           });
         });
     }, 20000);
-  })
+  });
+
+  describe('Get friends images', () => {
+    it('Get friends images successfully', async () => {
+      const expectedOutput: FriendImageOutput[] = [];
+      
+      return request(app.getHttpServer())
+        .get('/friends/images')
+        .set('Authorization', 'Bearer ' + authTokenForAdmin.accessToken)
+        .expect(HttpStatus.OK)
+        .expect({ data: expectedOutput, meta: { count: 0 } });
+    });
+  });
 
   afterAll(async () => {
     await app.close();

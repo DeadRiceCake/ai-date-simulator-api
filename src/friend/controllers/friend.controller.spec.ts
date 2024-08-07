@@ -17,6 +17,7 @@ describe('FriendController', () => {
   };
   const mockedFriendImageService = {
     generateFriendImage: jest.fn(),
+    getFriendImages: jest.fn(),
   };
   const mockedLogger = { setContext: jest.fn(), log: jest.fn() };
 
@@ -113,6 +114,21 @@ describe('FriendController', () => {
         data: expectedOutput,
         meta: {},
       });
+    });
+  });
+
+  describe('Get friend images', () => {
+    it('should call friendImageService.getFriendImages and return the correct result', async () => {
+      mockedFriendImageService.getFriendImages.mockResolvedValue({
+        friendImages: [],
+        count: 0,
+      });
+
+      const queryParams = { limit: 100, offset: 0 };
+
+      const result = await controller.getFriendImages(ctx, queryParams);
+      expect(mockedFriendImageService.getFriendImages).toHaveBeenCalledWith(ctx, queryParams.limit, queryParams.offset);
+      expect(result).toEqual({ data: [], meta: { count: 0 } });
     });
   });
 });
