@@ -22,7 +22,7 @@ jest.mock('openai', () => {
       },
     };
   });
-}, {virtual: true});
+});
 
 describe('AiService', () => {
   let service: AiService;
