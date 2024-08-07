@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { plainToClass } from 'class-transformer';
+import { plainToClass, plainToInstance } from 'class-transformer';
 
 import { AiService } from '../../ai/services/ai.service';
 import { AppLogger } from '../../shared/logger/logger.service';
@@ -39,5 +39,27 @@ export class FriendImageService {
     return plainToClass(FriendImageOutput, savedFriendImage, {
       excludeExtraneousValues: true,
     });
+  }
+
+  async getFriendImages(ctx: RequestContext, limit: number, offset: number): Promise<{ friendImages: FriendImageOutput[]; count: number }> {
+    this.logger.log(ctx, `${this.getFriendImages.name} was called`);
+
+    const userId = ctx.user!.id;
+
+    const [friendImages, count] = await this.repository.findAndCount({
+      where: {
+        user: {
+          id: userId,
+        },
+      },
+      take: limit,
+      skip: offset,
+    });
+
+    const friendImagesOutput = plainToInstance(FriendImageOutput, friendImages, {
+      excludeExtraneousValues: true,
+    });
+
+    return { friendImages: friendImagesOutput, count };
   }
 }

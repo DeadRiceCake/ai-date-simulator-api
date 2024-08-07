@@ -1,8 +1,9 @@
-import { Body, ClassSerializerInterceptor, Controller, HttpStatus, Post, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, ClassSerializerInterceptor, Controller, Get, HttpStatus, Post, Query, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { BaseApiErrorResponse, BaseApiResponse, SwaggerBaseApiResponse } from '../../shared/dtos/base-api-response.dto';
+import { PaginationParamsDto } from '../../shared/dtos/pagination-params.dto';
 import { AppLogger } from '../../shared/logger/logger.service';
 import { ReqContext } from '../../shared/request-context/req-context.decorator';
 import { RequestContext } from '../../shared/request-context/request-context.dto';
@@ -51,7 +52,7 @@ export class FriendController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @UseInterceptors(ClassSerializerInterceptor)
-  @Post('/image')
+  @Post('/images')
   @ApiOperation({
     summary: 'Generate friend image API',
   })
@@ -71,5 +72,31 @@ export class FriendController {
 
     const friendImgae = await this.friendImageService.generateFriendImage(ctx, input);
     return { data: friendImgae, meta: {} };
+  }
+
+  @Get('/images')
+  @ApiOperation({
+    summary: 'Get friend Images as a list API',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: SwaggerBaseApiResponse([FriendImageOutput]),
+  })
+  @UseInterceptors(ClassSerializerInterceptor)
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  async getArticles(
+    @ReqContext() ctx: RequestContext,
+    @Query() query: PaginationParamsDto,
+  ): Promise<BaseApiResponse<FriendImageOutput[]>> {
+    this.logger.log(ctx, `${this.getArticles.name} was called`);
+
+    const { friendImages, count } = await this.friendImageService.getFriendImages(
+      ctx,
+      query.limit,
+      query.offset,
+    );
+
+    return { data: friendImages, meta: { count } };
   }
 }
